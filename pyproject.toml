@@ -177,7 +177,7 @@ cu130 = [
     "trl>=0.23.0",
     "xgrammar>=0.2.0; sys_platform == 'linux'",
     "flashinfer-jit-cache==0.6.14+cu130; sys_platform == 'linux'",
-    "nvidia-cublas-cu13; sys_platform == 'linux'",
+    "nvidia-cublas; sys_platform == 'linux'",
     "nvidia-ml-py; sys_platform == 'linux'",
     "torch-c-dlpack-ext",
     "triton>=2.0.0; sys_platform == 'linux'",
@@ -265,6 +265,7 @@ flashinfer-cubin = [
 ]
 vllm = [
     { index = "vllm-v0-26-0-cu129", extra = "cu129", marker = "sys_platform == 'linux'" },
+    { index = "vllm-v0-26-0-cu130", extra = "cu130", marker = "sys_platform == 'linux'" },
 ]
 torch = [
     { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform == 'linux'" },
@@ -410,6 +411,11 @@ explicit = true
 [[tool.uv.index]]
 name = "vllm-v0-26-0-cu129"
 url = "https://wheels.vllm.ai/0.26.0/cu129"
+explicit = true
+
+[[tool.uv.index]]
+name = "vllm-v0-26-0-cu130"
+url = "https://wheels.vllm.ai/0.26.0/cu130"
 explicit = true
 # <<< END GENERATED CUDA UV SOURCES AND INDEXES - DO NOT EDIT >>>
 [build-system]
