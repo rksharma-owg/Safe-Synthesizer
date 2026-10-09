@@ -73,14 +73,13 @@ def _normalize_list_value(items: Sequence[object]) -> list[object]:
     is_repeated = len(items) > 1
     for item in items:
         if isinstance(item, str):
-            item_str = item.strip()
             # Repeated options preserve each argument as an atomic value
             if is_repeated:
-                cleaned = _unescape_list_token(item_str)
-                if cleaned:
-                    result.append(cleaned)
+                if item:
+                    result.append(item)
                 continue
 
+            item_str = item.strip()
             if item_str.startswith("[") and item_str.endswith("]"):
                 try:
                     parsed = json.loads(item_str)

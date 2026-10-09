@@ -659,6 +659,39 @@ def test_cli_list_parameters_end_to_end(cli_args: list[str], expected: list[str]
 
 
 @pytest.mark.parametrize(
+    ("columns", "expected"),
+    [
+        ([" account_id ", "other"], [" account_id ", "other"]),
+        ([r"column\,literal", "other"], [r"column\,literal", "other"]),
+        ([r"\[column\]", "other"], [r"\[column\]", "other"]),
+        ([" ", "other"], [" ", "other"]),
+        (["last, first", "[column]"], ["last, first", "[column]"]),
+        (["", "other"], ["other"]),
+    ],
+)
+def test_cli_repeated_list_preserves_literal_columns(columns: list[str], expected: list[str]):
+    """Repeated column flags retain whitespace and backslashes through validation."""
+    captured: dict = {}
+
+    @pydantic_options(SafeSynthesizerParameters, field_separator="__")
+    @click.command()
+    def cmd(**kwargs):
+        """Capture parsed CLI overrides."""
+        captured.update(parse_overrides(kwargs))
+
+    cli_args = ["--replace_pii__steps", '{"vars":{"first":"one"}}']
+    for column in columns:
+        cli_args.extend(["--replace_pii__globals__lock_columns", column])
+
+    result = CliRunner().invoke(cmd, cli_args)
+    assert result.exit_code == 0, result.output
+    assert captured["replace_pii"]["globals"]["lock_columns"] == expected
+    params = SafeSynthesizerParameters.model_validate(captured)
+    assert params.replace_pii is not None
+    assert params.replace_pii.globals.lock_columns == expected
+
+
+@pytest.mark.parametrize(
     "cli_args",
     [
         [

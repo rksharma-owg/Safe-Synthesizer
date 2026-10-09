@@ -247,9 +247,10 @@ safe-synthesizer run --data-source data.csv \
   --preflight__disabled_checks '["timeseries.shape", "gpu.vram"]'
 ```
 
-Use repeated flags when values may contain commas or brackets; each repeated
-argument is preserved as one list item. In a single comma-separated argument,
-escape a literal comma as `\,`, for example
+Use repeated flags when values may contain commas or brackets; each non-empty
+repeated argument is preserved verbatim as one list item, including whitespace
+and literal backslashes. Empty arguments are ignored. In a single comma-separated
+argument, escape a literal comma as `\,`, for example
 `--evaluation__pii_replay_columns 'last\, first,account_id'`. To preserve
 literal brackets in a single value, escape them as `\[customer\]` or use a
 JSON string array such as `'["[customer]"]'`. Lists of structured objects,
